@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+gem uninstall -Ix docker_compose_deploy && gem build docker_compose_deploy.gemspec && gem install docker_compose_deploy-`grep -oEi '\d.\d.\d' lib/docker_compose_deploy/version.rb`.gem
