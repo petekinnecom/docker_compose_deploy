@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require "docker_compose_deploy"
+
+DockerComposeDeploy::Provisioner.provision
