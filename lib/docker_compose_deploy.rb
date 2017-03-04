@@ -10,9 +10,6 @@ module DockerComposeDeploy
   end
 
   def self.configure!
-    # All paths relative to project root...because I feel like it...
-    Dir.chdir(File.expand_path('..', __dir__))
-
     load('./config.rb')
   end
 
