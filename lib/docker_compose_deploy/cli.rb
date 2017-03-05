@@ -9,14 +9,14 @@ module DockerComposeDeploy
     desc "push IMAGE_NAME", "push IMAGE_NAME to configured host"
     option :e, required: true, default: "test"
     def push(image_name)
-      DockerComposeDeploy.configure!(options[:e].to_sym)
+      DockerComposeDeploy.configure!(options[:e])
       Actions::Image.new(image_name, Util::Shell.new).push
     end
 
     desc "deploy", "deploy your docker-compose.yml to configured host"
     option :e, required: true, default: "test"
     def deploy
-      DockerComposeDeploy.configure!(options[:e].to_sym)
+      DockerComposeDeploy.configure!(options[:e])
       ignore_pull_failures = DockerComposeDeploy.config.ignore_pull_failures
       Actions::Deployment.new(ignore_pull_failures, Util::Shell.new).create
     end
@@ -24,14 +24,14 @@ module DockerComposeDeploy
     desc "backup", "backup the data directory of the configured host"
     option :e, required: true, default: "test"
     def backup
-      DockerComposeDeploy.configure!(options[:e].to_sym)
+      DockerComposeDeploy.configure!(options[:e])
       Actions::Backup.new(Util::Shell.new).save
     end
 
     desc "provision", "provision the host to work with docker"
     option :e, required: true, default: "test"
     def provision
-      DockerComposeDeploy.configure!(options[:e].to_sym)
+      DockerComposeDeploy.configure!(options[:e])
       Actions::Server.new(Util::Shell.new).provision
     end
   end

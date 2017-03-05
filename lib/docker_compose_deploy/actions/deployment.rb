@@ -7,7 +7,7 @@ module DockerComposeDeploy
       def create
         shell.ssh!("mkdir -p ./sites")
         shell.ssh!("rm -rf ./sites/config") # bin/deploy is irreversible :)
-        shell.scp!(local_sites_path("config"), "#{connection}:./sites/config", "-r")
+        shell.scp!("./sites/config/", "#{connection}:./sites/config", "-r")
 
         docker_compose.services.each do |service_name|
           shell.ssh!("mkdir -p ./sites/data/#{service_name}")
@@ -36,10 +36,6 @@ module DockerComposeDeploy
 
       def connection
         DockerComposeDeploy.config.connection
-      end
-
-      def local_sites_path(subdir)
-        File.join(DockerComposeDeploy.config.sites_path, subdir)
       end
     end
   end
