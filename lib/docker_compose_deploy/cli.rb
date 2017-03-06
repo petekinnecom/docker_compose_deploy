@@ -8,9 +8,12 @@ module DockerComposeDeploy
   class CLI < Thor
     desc "push IMAGE_NAME", "push IMAGE_NAME to configured host"
     option :e, required: true, default: "test"
-    def push(image_name)
+    def push(*image_names)
       DockerComposeDeploy.configure!(options[:e])
-      Actions::Image.new(image_name, Util::Shell.new).push
+      shell = Util::Shell.new
+      image_names.each do |image_name|
+        Actions::Image.new(image_name, shell).push
+      end
     end
 
     desc "deploy", "deploy your docker-compose.yml to configured host"
