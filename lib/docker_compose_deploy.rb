@@ -18,6 +18,16 @@ module DockerComposeDeploy
     def initialize(environment, yaml)
       @connection = yaml.fetch(environment).fetch("connection")
       @ignore_pull_failures = yaml.fetch(environment).fetch("ignore_pull_failures", false)
+      @environment = environment
+      @yaml = yaml
+    end
+
+    def test?
+      @environment == "test"
+    end
+
+    def test_domains
+      @yaml.fetch("test_domains", [])
     end
   end
 end

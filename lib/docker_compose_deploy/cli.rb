@@ -18,7 +18,13 @@ module DockerComposeDeploy
     def deploy
       DockerComposeDeploy.configure!(options[:e])
       ignore_pull_failures = DockerComposeDeploy.config.ignore_pull_failures
-      Actions::Deployment.new(ignore_pull_failures, Util::Shell.new).create
+      shell = Util::Shell.new
+
+      Actions::Deployment.new(ignore_pull_failures, shell).create
+
+      if DockerComposeDeploy.config.test?
+        Actions::Hosts.new(shell).hijack
+      end
     end
 
     desc "backup", "backup the data directory of the configured host"
