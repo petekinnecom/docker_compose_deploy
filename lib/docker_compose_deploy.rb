@@ -14,20 +14,27 @@ module DockerComposeDeploy
   end
 
   class Configuration
-    attr_reader :connection, :ignore_pull_failures
     def initialize(environment, yaml)
-      @connection = yaml.fetch(environment).fetch("connection")
-      @ignore_pull_failures = yaml.fetch(environment).fetch("ignore_pull_failures", false)
       @environment = environment
       @yaml = yaml
     end
 
-    def test?
-      @environment == "test"
+    def ignore_pull_failures
+      config_block.fetch("ignore_pull_failures", false)
     end
 
-    def test_domains
-      @yaml.fetch("test_domains", [])
+    def connection
+      config_block["connection"] || raise("INVALID CONFIG: Environment '#{@environment}' does not specify a connection string in config.yml")
+    end
+
+    def domains
+      config_block.fetch("domains", [])
+    end
+
+    private
+
+    def config_block
+      @yaml[@environment] || raise("INVALID ENVIRONMENT: Environment '#{@environment}' is not configured in config.yml")
     end
   end
 end

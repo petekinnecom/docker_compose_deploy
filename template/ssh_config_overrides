@@ -1,0 +1,27 @@
+# This keeps the connection alive for two seconds
+# after each usage. This improves performance.
+
+Host *
+  ControlPath ~/.ssh/sock-%r@%h:%p
+  ControlMaster auto
+  ControlPersist 2
+
+# The following configuration for the "default" host works
+# with the default Vagrant file and vagrant 1.9.1. If you
+# cannot connect using:
+#
+#   ssh -F ssh_config_overrides vagrant@default
+#
+# Then replace this Host definition with the output from
+# the command: `vagrant ssh-config`
+
+Host default
+  HostName 127.0.0.1
+  User vagrant
+  Port 2222
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile .vagrant/machines/default/virtualbox/private_key
+  IdentitiesOnly yes
+  LogLevel FATAL

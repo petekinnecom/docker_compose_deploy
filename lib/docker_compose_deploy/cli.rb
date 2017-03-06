@@ -24,10 +24,7 @@ module DockerComposeDeploy
       shell = Util::Shell.new
 
       Actions::Deployment.new(ignore_pull_failures, shell).create
-
-      if DockerComposeDeploy.config.test?
-        Actions::Hosts.new(shell).hijack
-      end
+      Actions::Hosts.new(shell).hijack
     end
 
     desc "backup", "backup the data directory of the configured host"
@@ -42,6 +39,11 @@ module DockerComposeDeploy
     def provision
       DockerComposeDeploy.configure!(options[:e])
       Actions::Server.new(Util::Shell.new).provision
+    end
+
+    desc "new", "create a new docker-compose server skeleton"
+    def new(name)
+      Actions::Skeleton.new(name, Util::Shell.new).create
     end
   end
 end

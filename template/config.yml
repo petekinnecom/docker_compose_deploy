@@ -1,0 +1,80 @@
+# Environment configuration
+#
+# You can define as many "environments" as you like. I've found
+# that I only need two. The "test" environment is the vagrant
+# box, the "production" environment uses my virtual machine on
+# DigitalOcean.
+#
+# When using the `dcd` command, you can specify the environment
+# using the `-e` flag. Here is an example:
+#
+#  dcd deploy -e production
+#
+# If the `-e` is not set, it will default to "test".
+#
+################################################################
+#
+# "connection": How we connect to the host machine
+#
+# For each, we must configure the connection string that we use
+# to connect to the host using ssh. The "test" environment is
+# already setup for the vagrant host. You need to configure the
+# production environment.
+#
+################################################################
+#
+# "ignore_pull_failures": Pull Failures configuration
+#
+# For each environment we can also set the "ignore_pull_failures"
+# flag. This flag is used when deploying your docker-compose.yml.
+#
+# We run `docker-compose pull` to pull down the latest
+# images from hub.docker.com. If you have decided instead
+# to push your images directly to your host (using
+# `dcd push image_name`) then these images will fail to be pulled
+# from hub.docker.com (since they were never put there).
+#
+# If images cannot be pulled, then `docker-compose pull` will
+# consider this an error. Setting `ignore_pull_failures` to `true`
+# will tell docker-compose to ignore any errors generated while
+# pulling down the latest image.
+#
+# If you are using hub.docker.com, leave this as false.
+#
+# If you are using `dcd push image_name` then set this to true
+#
+################################################################
+#
+# "domains" => Urls to hijack on the host machine
+#
+# It can be tricky to ensure that the nginx configuration that
+# your proxy is using is routing things to the correct docker
+# container.
+#
+# In order to help test things on the vagrant machine, we add
+# the listed domains to the /etc/hosts file of the machine.
+# We can then use firefox on the vagrant machine to visit one
+# of the domains and the request will be routed back to our
+# nginx proxy.
+#
+# Add an entry here for each subdomain that you have on your
+# production server. Notice how the three domains specified
+# here are present in the sites/config/proxy/nginx.conf file.
+#
+# Note that you can specify any domain, but using the ".test"
+# domain will keep things clear while testing.
+#
+# You should have no reason to add domains for your production
+# server.
+#
+
+test:
+  connection: "vagrant@default"
+  ignore_pull_failures: false
+  domains:
+    - www.test
+    - site1.test
+    - site2.test
+production:
+  connection: "user@yourserver"
+  ignore_pull_failures: false

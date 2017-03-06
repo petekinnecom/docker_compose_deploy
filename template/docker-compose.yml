@@ -1,0 +1,26 @@
+version: '3'
+services:
+  proxy:
+    image: nginx:1.11.10
+    command: ["nginx", "-c", "/mnt/config/nginx.conf", "-g", "daemon off;"]
+    volumes:
+      - ./sites/config/proxy:/mnt/config
+      - ./sites/data/proxy:/mnt/data
+      - ./sites/log/proxy:/mnt/log
+    ports:
+      - 80:80
+    depends_on:
+      - site1
+      - site2
+  site1:
+    image: petekinnecom/compose_deploy_site:1.0
+    volumes:
+      - ./sites/config/site1:/mnt/config
+      - ./sites/data/site1:/mnt/data
+      - ./sites/log/site1:/mnt/log
+  site2:
+    image: petekinnecom/compose_deploy_site:2.0
+    volumes:
+      - ./sites/config/site2:/mnt/config
+      - ./sites/data/site2:/mnt/data
+      - ./sites/log/site2:/mnt/log

@@ -3,10 +3,11 @@ module DockerComposeDeploy
     class Hosts < Struct.new(:shell)
 
       def hijack
-        raise "Don't hijack in production." unless DockerComposeDeploy.config.test?
+        return unless DockerComposeDeploy.config.domains.any?
+
         shell.notify("Creating hosts entries for test_domains")
 
-        host_entries = ["localhost", "vagrant"] + DockerComposeDeploy.config.test_domains
+        host_entries = ["localhost", "vagrant"] + DockerComposeDeploy.config.domains
         Tempfile.open do |f|
           host_entries.each do |host|
             f.puts("127.0.0.1 #{host}")
