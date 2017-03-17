@@ -41,7 +41,7 @@ module DockerComposeDeploy
       Actions::Server.new(Util::Shell.new).provision
     end
 
-    desc "new", "create a new docker-compose server skeleton"
+    desc "new PROJECT_NAME", "create a new docker-compose server skeleton"
     def new(name)
       Actions::Skeleton.new(name, Util::Shell.new).create
     end
