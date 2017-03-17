@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.email         = ["rubygems@k7u7.com"]
   spec.licenses    = ['MIT']
 
-  spec.summary       = %q{This helps you deploy a website using docker-compose}
-  spec.homepage      = "http://www.petekinnecom.net"
+  spec.summary       = %q{Easily deploy a Docker Compose project}
+  spec.homepage      = "http://github.com/petekinnecom/docker_compose_deploy"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
