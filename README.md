@@ -12,20 +12,6 @@ While these scripts are great for your personal projects, they will not help you
 
 This doesn't provide much over using docker-machine, but it will simplify working with volumes and allow you to test your deployment in a realistic environment.
 
-### Commands
-
-Each command takes an optional `-e [environment]`. If the environment is not set, it will default to `test`. This environment corresponds to the entry in `config.yml`. There you can configure the connection string for sshing to the host. By default the `test` environment is set up to connect to the vagrant host configured in the Vagrantfile.
-
-`dcd new [project_name]`: Scaffold a new project.
-
-`dcd provision`: Install Docker & DockerCompose on the host machine.
-
-`dcd deploy`: Push your `docker-compose.yml` to the host machine, create directories for volume-mapping (explained below), pull the required docker images, and run `docker-compose up`.
-
-`dcd backup`: Tar, bzip, and download the `./sites/data` for safekeeping.
-
-`dcd push [image_names]`: __If all of your images are on hub.docker.com, then you don't need this command.__ Normally you might push your docker images to http://hub.docker.com. However, you might have some images that you'd prefer to keep private. This command will take a local image, tar it, push it to the remote host. Using `dcd push` you do not need to push your private image to docker hub. This is significantly slower than using the registry because you need to push the entire image each time. Note that if you use this command, you will need to set `ignore_pull_failures: true` in your `config.yml`.
-
 
 ### The big picture
 
@@ -45,6 +31,20 @@ As I add new apps I must update my nginx config. Testing this can be tricky, sin
 
 - Push your project to a vagrant machine
 - Create entries in `/etc/hosts` on the vagrant machine to help you test your nginx config
+
+### Commands
+
+Each command takes an optional `-e [environment]`. If the environment is not set, it will default to `test`. This environment corresponds to the entry in `config.yml`. There you can configure the connection string for sshing to the host. By default the `test` environment is set up to connect to the vagrant host configured in the Vagrantfile.
+
+`dcd new [project_name]`: Scaffold a new project.
+
+`dcd provision`: Install Docker & DockerCompose on the host machine.
+
+`dcd deploy`: Push your `docker-compose.yml` to the host machine, create directories for volume-mapping (explained below), pull the required docker images, and run `docker-compose up`.
+
+`dcd backup`: Tar, bzip, and download the `./sites/data` for safekeeping.
+
+`dcd push [image_names]`: __If all of your images are on hub.docker.com, then you don't need this command.__ Normally you might push your docker images to http://hub.docker.com. However, you might have some images that you'd prefer to keep private. This command will take a local image, tar it, push it to the remote host. Using `dcd push` you do not need to push your private image to docker hub. This is significantly slower than using the registry because you need to push the entire image each time. Note that if you use this command, you will need to set `ignore_pull_failures: true` in your `config.yml`.
 
 
 ### Installation

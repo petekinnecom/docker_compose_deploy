@@ -31,6 +31,10 @@ module DockerComposeDeploy
       config_block.fetch("domains", [])
     end
 
+    def stack?
+      config_block.fetch("stack", false)
+    end
+
     private
 
     def config_block

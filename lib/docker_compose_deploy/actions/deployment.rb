@@ -10,14 +10,23 @@ module DockerComposeDeploy
         shell.scp!("./sites/config/", "#{connection}:./sites/config", "-r")
 
         docker_compose.services.each do |service_name|
+          shell.ssh!("mkdir -p ./sites/config/#{service_name}")
           shell.ssh!("mkdir -p ./sites/data/#{service_name}")
           shell.ssh!("mkdir -p ./sites/log/#{service_name}")
         end
 
-        shell.scp!(docker_compose.path, "#{connection}:./docker-compose.yml")
-        shell.ssh!("docker-compose down")
-        shell.ssh!("docker-compose pull #{ignore_pull_failures_option}")
-        shell.ssh!("docker-compose up -d")
+        if DockerComposeDeploy.config.stack?
+          shell.scp!(docker_compose.path, "#{connection}:./docker-stack.yml")
+          shell.ssh!("docker node ls || docker swarm init") # ensure a swarm is initialized
+          shell.ssh!("docker stack rm dcd_stack || exit 0") # try to remove previous stack
+          shell.ssh!("while docker ps | grep dcd > /dev/null; do echo 'waiting for shutdown' && sleep 1; done")
+          shell.ssh!("docker stack deploy --compose-file docker-stack.yml dcd_stack")
+        else
+          shell.scp!(docker_compose.path, "#{connection}:./docker-compose.yml")
+          shell.ssh!("docker-compose down")
+          shell.ssh!("docker-compose pull #{ignore_pull_failures_option}")
+          shell.ssh!("docker-compose up -d")
+        end
 
         shell.notify "success"
       end

@@ -14,7 +14,9 @@
 #
 ################################################################
 #
-# "connection": How we connect to the host machine
+# "connection": "user@host"
+#
+# How we connect to the host machine
 #
 # For each, we must configure the connection string that we use
 # to connect to the host using ssh. The "test" environment is
@@ -23,7 +25,9 @@
 #
 ################################################################
 #
-# "ignore_pull_failures": Pull Failures configuration
+# "ignore_pull_failures": true/false
+#
+# Pull Failures configuration
 #
 # For each environment we can also set the "ignore_pull_failures"
 # flag. This flag is used when deploying your docker-compose.yml.
@@ -45,7 +49,26 @@
 #
 ################################################################
 #
-# "domains" => Urls to hijack on the host machine
+# "stack": true/false
+#
+# Deploy using docker stack
+#
+# Since docker-compose seems to be on its way out, this flag
+# allows you to deploy your docker-compose file using docker stack
+#
+# This is recommended.
+#
+# If your deployment is not working, try checking
+#
+#   docker node ps
+#
+# for information on why your containers are not starting.
+#
+################################################################
+#
+# "domains" => ["domain1", "domain1"]
+#
+# Urls to hijack on the host machine
 #
 # It can be tricky to ensure that the nginx configuration that
 # your proxy is using is routing things to the correct docker
@@ -71,10 +94,12 @@
 test:
   connection: "vagrant@default"
   ignore_pull_failures: false
+  stack: true
   domains:
     - www.test
     - site1.test
     - site2.test
 production:
+  stack: true
   connection: "user@yourserver"
   ignore_pull_failures: false
