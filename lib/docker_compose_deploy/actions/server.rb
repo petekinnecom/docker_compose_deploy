@@ -8,7 +8,9 @@ module DockerComposeDeploy
         shell.ssh!("sudo usermod -aG docker $USER")
         shell.ssh!("true", "-O exit") # resets the connection, so that our group changes take effect
 
-        shell.ssh!("wget -qO- https://get.docker.com/ | bash")
+        shell.ssh!("curl -L https://get.docker.com/ > ./docker-install")
+        shell.ssh!("bash docker-install")
+        shell.ssh!("rm docker-install")
         shell.ssh!("curl -L https://github.com/docker/compose/releases/download/1.11.1/run.sh > ./docker-compose")
         shell.ssh!("chmod +x docker-compose")
         shell.ssh!("sudo mv ./docker-compose /usr/local/bin/docker-compose")
